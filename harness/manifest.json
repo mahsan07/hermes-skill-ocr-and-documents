@@ -1,0 +1,85 @@
+{
+  "protocol_version": "0.1",
+  "skill": {
+    "id": "hermes-skill-ocr-and-documents",
+    "display_name": "OCR and Documents",
+    "description": "Extract text and structure from PDFs and scans using OCR and document parsers."
+  },
+  "task_profile": {
+    "category": "integration",
+    "architecture": "pipeline",
+    "artifact": "document",
+    "inputs": [
+      "PDF or scanned images",
+      "Page rasterizer"
+    ],
+    "outputs": [
+      "Searchable export",
+      "Page 1 / 18",
+      "Heading",
+      "Table 3\u00d75",
+      "OCR confidence 96%"
+    ]
+  },
+  "modules": {
+    "memory": {
+      "strategy": "stage_artifact_log",
+      "responsibility": "Retain pdf or scanned images plus decisions, observations, and verification evidence needed to resume safely."
+    },
+    "planning": {
+      "strategy": "linear_gated_plan",
+      "responsibility": "Transform page rasterizer into the ordered, bounded stages defined by this skill."
+    },
+    "action": {
+      "strategy": "inspect_preview_authorize_execute_reread",
+      "responsibility": "Advance the workflow through ocr and layout detector while preserving stop conditions and user authority."
+    },
+    "capability": {
+      "strategy": "task_conditioned_minimum_capability_set",
+      "responsibility": "Expose the minimum service operations required for the requested target; writes require an explicit preview gate."
+    }
+  },
+  "execution": {
+    "stages": [
+      "Inspect file type page count and quality",
+      "Render pages at OCR-safe resolution",
+      "Detect text blocks tables and reading order",
+      "Recognize text with confidence values",
+      "Normalize headings paragraphs and tables",
+      "Export searchable text with page references"
+    ],
+    "gates": [
+      "scope_and_authority_confirmed",
+      "capability_and_dependency_preflight",
+      "consequential_action_previewed_when_applicable",
+      "output_reopened_and_verified"
+    ]
+  },
+  "verification": {
+    "evidence": [
+      "Page 1 / 18",
+      "Heading",
+      "Table 3\u00d75",
+      "OCR confidence 96%"
+    ],
+    "metrics": [
+      "task_success",
+      "verification_pass_rate",
+      "tool_error_rate",
+      "repair_count",
+      "latency_ms",
+      "estimated_cost_usd"
+    ]
+  },
+  "failure_policy": {
+    "max_repairs": 2,
+    "schema_error": "repair_then_stop",
+    "permission_error": "stop_without_retry",
+    "verification_failure": "report_incomplete"
+  },
+  "maturity": {
+    "level": "executable_contract",
+    "runtime_scope": "validation_and_dry_run_planning",
+    "claim_boundary": "This repository validates and plans the harness contract; it does not claim live service execution or benchmark gains without a connected adapter and measured evidence."
+  }
+}
