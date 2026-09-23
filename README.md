@@ -64,6 +64,10 @@ Read [SAFETY.md](SAFETY.md), [SECURITY.md](SECURITY.md), and the detailed [How i
 | `SAFETY.md` / `SECURITY.md` | Operational and disclosure boundaries. |
 | `tests/README.md` | Contract and package validation guidance. |
 
+## Companion workflow: Archive Intake
+
+For ZIP/TAR bundles, emailed skill packs, or connected-drive archives, use the portable [Archive Intake skill](archive-intake/SKILL.md). It materializes the raw archive into a disposable workspace, preflights it for traversal/link/bomb hazards, preserves the directory tree, emits SHA-256 verification evidence, and can hand the verified files back to the calling agent or connected storage. This is the preferred pattern for ChatGPT, Hermes, Claude/Cowork-style runtimes, or MCP agents that can access raw file bytes.
+
 ## Maturity
 
 This is a public reference workflow extracted from a larger private workbench. It does not include a hosted runtime, credentials, or private infrastructure. Adopters must connect compatible tools and validate behavior in their own environment.
